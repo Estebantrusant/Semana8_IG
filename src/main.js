@@ -256,7 +256,7 @@ async function initThreeJS() {
       }
       infoBox.style.display = "none";
     }
-  });-
+  });
 
   function highlightAndShowInfo(pointMesh, stationData) {
     if (INTERSECTED) {
