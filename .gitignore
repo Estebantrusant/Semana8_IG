@@ -1,0 +1,10 @@
+# Dependencias de Node
+/node_modules
+
+# Archivos de build/dist (creados por Vite/npm run build)
+/dist
+/.temp
+
+# Archivos de configuración y logs
+npm-debug.log
+.env
