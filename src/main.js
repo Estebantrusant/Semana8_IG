@@ -44,7 +44,7 @@ async function loadAndParseCSV(url) {
         const rawValue = values[index] ? values[index].trim() : null;
 
         if (rawValue !== null && rawValue !== "") {
-          let processedValue = rawValue; // KEY CORRECTION: Replace comma with dot for X and Y coordinates
+          let processedValue = rawValue; 
 
           if (headerName === "X" || headerName === "Y") {
             processedValue = rawValue.replace(",", ".");
@@ -63,8 +63,7 @@ async function loadAndParseCSV(url) {
             headerName === "NOMBREVIA" ||
             headerName === "CODIGOESTACION"
           ) {
-            // Keep text fields as strings
-            row[headerName] = rawValue.replace(/"/g, ""); // Clean quotes
+            row[headerName] = rawValue.replace(/"/g, "");
           } else {
             row[headerName] = numValue;
           }
@@ -148,7 +147,7 @@ function normalizeCoordinates(data) {
 // ----------------------------------------------------------------------------------
 async function initThreeJS() {
   const accessData = await loadAndParseCSV(CSV_FILE_PATH);
-  const plotData = normalizeCoordinates(accessData); // --- SETUP BÁSICO ---
+  const plotData = normalizeCoordinates(accessData); 
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
@@ -161,20 +160,20 @@ async function initThreeJS() {
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
-  scene.background = new THREE.Color(0x1a1a2e); // Dark background // --- RAYCASTING SETUP ---
+  scene.background = new THREE.Color(0x1a1a2e);
 
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
-  let INTERSECTED = null; // To track the currently hovered or clicked object
-  let isOrbiting = false; // Bandera para evitar conflicto con OrbitControls (SOLUCIÓN CLIC) // --- LUCES ---
+  let INTERSECTED = null; 
+  let isOrbiting = false; 
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
   directionalLight.position.set(5, 10, 7.5).normalize();
-  scene.add(directionalLight); // --- CÁMARA POSICIÓN INICIAL ---
+  scene.add(directionalLight); 
 
-  camera.position.set(0, 0, 30); // --- ORBIT CONTROLS ---
+  camera.position.set(0, 0, 30); 
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
@@ -182,23 +181,23 @@ async function initThreeJS() {
   controls.screenSpacePanning = false;
   controls.minDistance = 5;
   controls.maxDistance = 100;
-  controls.update(); // Detección de Orbiting para bloquear el Raycasting
+  controls.update(); 
   controls.addEventListener("start", () => {
     isOrbiting = true;
   });
 
   controls.addEventListener("end", () => {
-    // Pequeño retraso para asegurar que un clic rápido no active la órbita
     setTimeout(() => {
       isOrbiting = false;
     }, 100);
-  }); // --- ACTUALIZACIÓN DE MOUSE PARA RAYCASTING (Necesario para detección de clic) ---
+  }); 
 
   renderer.domElement.addEventListener("mousemove", (e) => {
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-  }); // --- FUNCIÓN PARA MOSTRAR LA INFORMACIÓN DE LA ESTACIÓN ---
-
+  }); 
+  
+  // --- FUNCIÓN PARA MOSTRAR LA INFORMACIÓN DE LA ESTACIÓN ---
   const infoBox = document.createElement("div");
   infoBox.id = "info-box";
   
@@ -235,10 +234,9 @@ async function initThreeJS() {
         <li>Y: ${data.Y.toFixed(4)}</li>
       </ul>
     `;
-  } // --- DETECCIÓN DE CLIC (RAYCASTING) ---
+  } 
 
   renderer.domElement.addEventListener("click", () => {
-    // Evita el raycasting si el usuario estaba orbitando/arrastrando
     if (isOrbiting) {
       return;
     }
@@ -248,27 +246,26 @@ async function initThreeJS() {
 
     if (intersects.length > 0) {
       const pointMesh = intersects[0].object;
-      const stationData = pointMesh.userData; // Highlight the point and show info
+      const stationData = pointMesh.userData; 
 
       highlightAndShowInfo(pointMesh, stationData);
     } else {
-      // No point clicked, hide the popup and clear highlight
       if (INTERSECTED) {
         INTERSECTED.material.emissive.setHex(0x00aa00);
         INTERSECTED = null;
       }
       infoBox.style.display = "none";
     }
-  }); // --- FUNCIÓN PARA RESALTAR Y MOSTRAR INFO ---
+  });-
 
   function highlightAndShowInfo(pointMesh, stationData) {
     if (INTERSECTED) {
-      INTERSECTED.material.emissive.setHex(0x00aa00); // Reset old point (Green)
+      INTERSECTED.material.emissive.setHex(0x00aa00);
     }
     INTERSECTED = pointMesh;
-    INTERSECTED.material.emissive.setHex(0xff0000); // Highlight new point (Red)
+    INTERSECTED.material.emissive.setHex(0xff0000); 
     showStationInfo(stationData);
-  } // --- PLANO DE IMAGEN DE FONDO (MAPA) ---
+  } 
 
   const textureLoader = new THREE.TextureLoader();
   textureLoader.load(
@@ -306,30 +303,29 @@ async function initThreeJS() {
       errorPlane.position.z = -0.1;
       scene.add(errorPlane);
     }
-  ); // --- VISUALIZACIÓN DE ESTACIONES (Los puntos) ---
-
+  ); 
+  
+  // --- VISUALIZACIÓN DE ESTACIONES (Los puntos) ---
   const pointGeometry = new THREE.SphereGeometry(0.2, 8, 8);
   const material = new THREE.MeshPhongMaterial({
     color: 0x00ff00,
     emissive: 0x00aa00,
   });
   const pointsGroup = new THREE.Group();
-  scene.add(pointsGroup); // Valores fijos solicitados
+  scene.add(pointsGroup);
 
   const currentScale = 1.54;
   const currentOffsetX = 0.8;
   const currentOffsetY = -0.7;
 
   function updatePoints(scale, offsetX, offsetY) {
-    // Limpia los puntos anteriores
-    pointsGroup.clear(); // Define los límites del mapa. El plano va de -10 a 10 en X e Y.
+    pointsGroup.clear();
     const HALF_SIZE = TARGET_PLOT_SIZE / 2; // 10
 
     if (plotData.length > 0) {
       plotData.forEach((item) => {
-        // 1. Calcula la posición final del punto con escala y offset
         const finalX = item.normalizedX * scale + offsetX;
-        const finalY = item.normalizedY * scale + offsetY; // 2. Comprueba si el punto está DENTRO de los límites [-10, 10]
+        const finalY = item.normalizedY * scale + offsetY; 
 
         if (
           finalX >= -HALF_SIZE &&
@@ -337,10 +333,9 @@ async function initThreeJS() {
           finalY >= -HALF_SIZE &&
           finalY <= HALF_SIZE
         ) {
-          // Si está dentro, crea y añade el mesh
-          const mesh = new THREE.Mesh(pointGeometry, material); // 🚨 Almacena el dato original para el raycasting
+          const mesh = new THREE.Mesh(pointGeometry, material); 
 
-          mesh.userData = item; // Aplica la posición final
+          mesh.userData = item; 
 
           mesh.position.set(finalX, finalY, 0.05);
 
@@ -348,17 +343,18 @@ async function initThreeJS() {
         }
       });
     }
-  } // Dibujo inicial con los valores fijos
+  } 
 
-  updatePoints(currentScale, currentOffsetX, currentOffsetY); // --- BUCLE DE ANIMACIÓN ---
-
+  updatePoints(currentScale, currentOffsetX, currentOffsetY); 
+ 
+  // --- BUCLE DE ANIMACIÓN ---
   function animate() {
     requestAnimationFrame(animate);
-    controls.update(); // Necesario para el efecto de inercia y la órbita
+    controls.update();
     renderer.render(scene, camera);
   }
 
-  animate(); // Manejar redimensionamiento
+  animate(); 
 
   window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
