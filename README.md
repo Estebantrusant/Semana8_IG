@@ -1,6 +1,6 @@
 # Práctica S8 IG: Visualización Geográfica de Datos en Three.js
 
-## 1. 💡 Propuesta de Visualización y Objetivo
+## 1. Propuesta de Visualización y Objetivo
 
 Esta práctica consiste en una visualización interactiva 3D desarrollada en **Three.js** utilizando datos geográficos de acceso abierto (accesos de estaciones).
 
@@ -11,6 +11,8 @@ El objetivo es representar la **ubicación espacial de los puntos de acceso/esta
 * **Georreferenciación y Normalización:** Las coordenadas geográficas (X/Y) del archivo `M4_Accesos.csv` se han **normalizado y escalado** para ajustarse a un plano de **20x20 unidades** de Three.js.
 * **Interactividad (Raycasting):** Se utiliza el Raycasting para detectar el clic del ratón sobre las esferas (estaciones).
 * **Visualización de Datos:** Un panel HTML (`#info-box`) superpuesto muestra información detallada del punto (Código, Acceso, Vía/Calle y Coordenadas originales).
+<img width="270" height="272" alt="image" src="https://github.com/user-attachments/assets/2ab96d6e-592f-437d-96e9-592452d3828f" />
+
 * **Navegación:** Implementación de `OrbitControls` para rotar, hacer zoom y panear la escena 3D.
 
 ***
