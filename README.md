@@ -73,6 +73,6 @@ Asegúrate de tener [Node.js](https://nodejs.js.org/) y `npm` instalados.
 
 ##  Ver en CodeSandbox
 
-Puedes probar este proeycto en vivo usando el siguiente enlace:
+Puedes probar este proyecto en vivo usando el siguiente enlace:
 
-[Abrir Proyecto en CodeSandbox](https://codesandbox.io/p/sandbox/ig2526-s9-esteban-swdgfz)
+[Abrir Proyecto en CodeSandbox](https://codesandbox.io/p/sandbox/amazing-microservice-w7rj52)
