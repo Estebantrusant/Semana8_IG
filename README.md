@@ -70,3 +70,9 @@ Asegúrate de tener [Node.js](https://nodejs.js.org/) y `npm` instalados.
 | `src/Madrid-Map-Spain.jpg` | Textura de mapa utilizada como plano de fondo. |
 
 ***
+
+##  Ver en CodeSandbox
+
+Puedes probar este proeycto en vivo usando el siguiente enlace:
+
+[Abrir Proyecto en CodeSandbox](https://codesandbox.io/p/sandbox/ig2526-s9-esteban-swdgfz)
